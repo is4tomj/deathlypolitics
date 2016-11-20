@@ -7,10 +7,25 @@ function showTotalExecuted(data) {
   }
 }
 
+function showLastExecuted(data) {
+  var lastExecuted = data[0];
+  for(var i=1; i<data.length; i++) {
+    if(data[i].date > lastExecuted.date) {
+      lastExecuted = data[i];
+    } 
+  }
+
+  var space = $("#last-executed");
+  if(space.length > 0) {
+    space.text("name:" + lastExecuted.name);
+  }
+}
+
 $(function() {
 
   if(executionData.length > 0) {
     showTotalExecuted(executionData);
+    showLastExecuted(executionData);
   }
 
 

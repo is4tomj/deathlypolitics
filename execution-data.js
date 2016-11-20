@@ -1,7 +1,5 @@
 "use strict";
 
-var executionDataCSVHeader = "Date,Name,Age,Sex,Race,NumberRaceSexOfVictims,State,Region,Method,Juvenile,Federal,Volunteer,ForeignNational,County";
-
 var executionDataCSV = `01/10/1986,James Roach,25,m,White,1 White Male(s)1 White Female(s),SC,S,Electrocution,Yes,No,No,No,Richland
 01/11/1985,Joseph Shaw,29,m,White,1 White Male(s)1 White Female(s),SC,S,Electrocution,No,No,No,No,Richland
 01/08/1997,Paul Ruiz,49,m,Latino,2 White Male(s),AR,S,Lethal Injection,No,No,No,No,Logan
@@ -1443,6 +1441,7 @@ var executionDataCSV = `01/10/1986,James Roach,25,m,White,1 White Male(s)1 White
 10/19/2016,Gregory Lawler,63,m,White,1 White Male(s),GA,S,Lethal Injection,No,No,No,No,Fulton
 11/16/2016,Steven Spears,54,m,White,1 White Female(s),GA,S,Lethal Injection,No,No,Yes,No,Lumpkin`;
 
+var executionDataCSVHeader = "Date,Name,Age,Sex,Race,NumberRaceSexOfVictims,State,Region,Method,Juvenile,Federal,Volunteer,ForeignNational,County";
 
 var executionData = [];
 {
@@ -1453,7 +1452,12 @@ var executionData = [];
     var record = records[i].split(",");
     var recordHash = {}
     for(var j=0; j<fieldNames.length; j++) {
-      recordHash[fieldNames[j]] = record[j];
+      if(j==0) { // date
+        recordHash[fieldNames[j].toLowerCase()] = new Date(record[j]);
+      }
+      else {
+        recordHash[fieldNames[j]] = record[j];  
+      }
     }
     executionData.push(recordHash);
   }
