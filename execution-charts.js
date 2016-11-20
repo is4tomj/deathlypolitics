@@ -18,7 +18,7 @@ function showLastExecuted(data) {
   var space = $("#last-executed");
   if(space.length > 0) {
     var keys = Object.keys(lastExecuted);
-    for(var i=0; i<keys; i++) {
+    for(var i=0; i<keys.length; i++) {
       var key = keys[i];
       var entrySpace = $("#last-executed-"+key);
       if(entrySpace.length > 0) {
