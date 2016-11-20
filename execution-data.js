@@ -1444,15 +1444,17 @@ var executionDataCSV = `01/10/1986,James Roach,25,m,White,1 White Male(s)1 White
 11/16/2016,Steven Spears,54,m,White,1 White Female(s),GA,S,Lethal Injection,No,No,Yes,No,Lumpkin`;
 
 
-var executionData = {};
+var executionData = [];
 {
   var records = executionDataCSV.split("\n");
   var fieldNames = executionDataCSVHeader.split(",");
 
   for(var i=0; i<records.length; i++) {
     var record = records[i].split(",");
+    var recordHash = {}
     for(var j=0; j<fieldNames.length; j++) {
-      executionData[fieldNames[j]] = record[j];
+      recordHash[fieldNames[j]] = record[j];
+      executionData.push(recordHash);
     }
   }
 }
