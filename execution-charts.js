@@ -8,13 +8,14 @@ function showTotalExecuted(data) {
 }
 
 function showLastExecuted(data) {
-  var lastExecuted = data[0];
+  var lastExecuted = $.extend({}, data[0]);
   for(var i=1; i<data.length; i++) {
     if(data[i].date > lastExecuted.date) {
-      lastExecuted = data[i];
+      lastExecuted = $.extend({}, data[i]);
     } 
   }
 
+  lastExecuted.date = (lastExecuted.date.getMonth() + 1) + " " + lastExecuted.date.getDate() + ", " + lastExecuted.date.getFullYear();
   var space = $("#last-executed");
   if(space.length > 0) {
     var keys = Object.keys(lastExecuted);
