@@ -153,6 +153,24 @@ $(function() {
 
     var dataForYear = getExecutionStats(executionData, { date: new RegExp('2015', 'i')});
     showExecutionByRacePieChart(dataForYear, "2015-executions-by-race-chart", '2015 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2014', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2014-executions-by-race-chart", '2014 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2013', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2013-executions-by-race-chart", '2013 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2012', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2012-executions-by-race-chart", '2012 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2011', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2011-executions-by-race-chart", '2011 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2010', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2010-executions-by-race-chart", '2010 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2009', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2009-executions-by-race-chart", '2009 Executions by Race');
   }
 
   // const element = <h1>Hello, world</h1>;
