@@ -1452,11 +1452,12 @@ var executionData = [];
     var record = records[i].split(",");
     var recordHash = {}
     for(var j=0; j<fieldNames.length; j++) {
+      var fieldName = fieldNames[j].toLowerCase(); 
       if(j==0) { // date
-        recordHash[fieldNames[j].toLowerCase()] = new Date(record[j]);
+        recordHash[fieldName] = new Date(record[j]);
       }
       else {
-        recordHash[fieldNames[j]] = record[j];  
+        recordHash[fieldName] = record[j];  
       }
     }
     executionData.push(recordHash);
