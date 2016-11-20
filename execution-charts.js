@@ -7,6 +7,21 @@ function showTotalExecuted(data) {
   }
 }
 
+function prettyDate(date) {
+  var monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return monthNames[monthIndex] + ' ' + day + ', ' + year;
+}
+
 function showLastExecuted(data) {
   var lastExecuted = $.extend({}, data[0]);
   for(var i=1; i<data.length; i++) {
@@ -15,7 +30,7 @@ function showLastExecuted(data) {
     } 
   }
 
-  lastExecuted.date = (lastExecuted.date.getMonth() + 1) + " " + lastExecuted.date.getDate() + ", " + lastExecuted.date.getFullYear();
+  lastExecuted.date = prettyDate(lastExecuted.date);
   var space = $("#last-executed");
   if(space.length > 0) {
     var keys = Object.keys(lastExecuted);
