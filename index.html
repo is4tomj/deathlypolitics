@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="client/css/bootstrap-responsive.min.css">
 
     <script src="client/js/bootstrap.min.js"></script>
+
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
     <script src="execution-data.js"></script>
     <script src="execution-charts.js"></script>
     <script src="death-row-by-state.js"></script>
@@ -70,8 +74,33 @@
         </div>
       </div>
       <div class="page-header">
-        <h1>Deathly Politics</h1>
+        <h1>
+          Deathly Politics
+          <div class="pull-right">
+            <span id="total-executed-in-us" ></span> executed in the U.S. to date.
+          </div>
+        </h1>
       </div>
+
+      <!--<div class="row">
+        <div id="react-test" class="span12">
+        </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/babel">
+        var Greeting = React.createClass({
+          render: function() {
+            return (
+              <p>Hello, Universe</p>
+            )
+          }
+        });
+
+        ReactDOM.render(
+          <Greeting/>,
+          document.getElementById('react-test')
+        );
+      </script>-->
 
       <div class="row">
         <div id="polls" class="span12">
@@ -87,9 +116,6 @@
 
       <div class="row">
         <div class="span12">
-          <div id="general-stats">
-            Total executed: <span id="total-executed-in-us"><span>
-          </div>
           <div id="last-executed">
             <h2>Last person executed</h2>
             <table class="table table-striped table-condensed">
@@ -131,6 +157,13 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span6">
+          <div id="2015-executions-by-race-chart"></div>
+        </div>
+        <div class="span6">
           <div id="2016-executions-by-race-chart"></div>
         </div>
       </div>

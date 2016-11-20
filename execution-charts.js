@@ -59,23 +59,36 @@ function incrementStats(stats, keyBase, keyExtension) {
   return stats[key];
 }
 
-function getStatsForYear(data, year) {
-  var statsYear = [];
-  for(var i=0; i<data.length; i++) {
-    var record = data[i];
-    if(record.date.getFullYear() === year) {
-      statsYear.push(record);
-    } 
+function getExecutionStats(stats, criteria) {
+
+  var filteredStats = [];
+
+  for(var i=0; i<stats.length; i++) {
+    var record = stats[i];
+    var keys = Object.keys(criteria);
+    var shouldAddToResults = true;
+
+    for(var j=0; j<keys.length; j++) {
+      var key = keys[j];
+
+      if(record[key].toString().match(criteria[key]) === null) {
+        shouldAddToResults = false;
+      }
+    }
+
+    if(shouldAddToResults) {
+      filteredStats.push(record);
+    }
   }
-  return statsYear;
+
+  return filteredStats;
 }
 
-function showExecutionPieChart(data, year, divId) {
-  var dataForYear = getStatsForYear(data, year);
-
+function showExecutionByRacePieChart(data, divId, title) {
+  
   var stats = {};
-  for(var i=0; i<dataForYear.length; i++) {
-    var record = dataForYear[i];
+  for(var i=0; i<data.length; i++) {
+    var record = data[i];
     var race = record.race;
     incrementStats(stats, "executed_race_", record.race.toLowerCase());
   }
@@ -107,7 +120,7 @@ function showExecutionPieChart(data, year, divId) {
 
       // Set chart options
       var options = {
-        title:'2016 Executions by Race',
+        title: title,
         width:500,
         height:300,
         legend: {
@@ -134,6 +147,17 @@ $(function() {
   if(executionData.length > 0) {
     showTotalExecuted(executionData);
     showLastExecuted(executionData);
-    showExecutionPieChart(executionData, 2016, "2016-executions-by-race-chart");
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2016', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2016-executions-by-race-chart", '2016 Executions by Race');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2015', 'i')});
+    showExecutionByRacePieChart(dataForYear, "2015-executions-by-race-chart", '2015 Executions by Race');
   }
+
+  // const element = <h1>Hello, world</h1>;
+  // ReactDOM.render(
+  //   element,
+  //   document.getElementById('root')
+  // );
 });
