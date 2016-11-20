@@ -44,6 +44,21 @@ function showLastExecuted(data) {
   }
 }
 
+
+function incrementStats(stats, keyBase, keyExtension) {
+  var key = keyBase;
+  if(keyExtension !== undefined || keyExtension !== null) {
+    key += keyExtension;
+  }
+
+  if(stats[key] === undefined || stats[key] === null) {
+    stats[key] = 0;
+  }
+  stats[key] += 1;
+
+  return stats[key];
+}
+
 $(function() {
 
   if(executionData.length > 0) {
@@ -51,6 +66,13 @@ $(function() {
     showLastExecuted(executionData);
   }
 
+  var stats = {};
+  for(var i=0; i<executionData.length; i++) {
+    var record = executionData[i];
+    var race = record.race;
+    incrementStats(stats, "executed_race_", record.race.toLowerCase());
+  }
+  console.log(stats);
 
   var totalExecutedDiv = $("#total-executed-in-us");
   if(totalExecutedDiv.length > 0) {
@@ -67,14 +89,14 @@ $(function() {
 
       // Create the data table.
       var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Topping');
-      data.addColumn('number', 'Slices');
+      data.addColumn('string', 'Race');
+      data.addColumn('number', 'Executed');
       data.addRows([
-        ['Mushrooms', 3],
-        ['Onions', 1],
-        ['Olives', 1],
-        ['Zucchini', 1],
-        ['Pepperoni', 2]
+        ['Asian', stats.executed_race_asian],
+        ['Black', stats.executed_race_black],
+        ['Latino', stats.executed_race_latino],
+        ['Other', stats.executed_race_other],
+        ['White', stats.executed_race_white]
       ]);
 
       // Set chart options
