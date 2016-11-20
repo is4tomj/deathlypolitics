@@ -59,23 +59,29 @@ function incrementStats(stats, keyBase, keyExtension) {
   return stats[key];
 }
 
-$(function() {
-
-  if(executionData.length > 0) {
-    showTotalExecuted(executionData);
-    showLastExecuted(executionData);
+function getStatsForYear(data, year) {
+  var statsYear = [];
+  for(var i=0; i<data.length; i++) {
+    var record = data[i];
+    if(record.date.getFullYear() === year) {
+      statsYear.push(record);
+    } 
   }
+  return statsYear;
+}
+
+function showExecutionPieChart(data, year, divId) {
+  var dataForYear = getStatsForYear(data, year);
 
   var stats = {};
-  for(var i=0; i<executionData.length; i++) {
-    var record = executionData[i];
+  for(var i=0; i<dataForYear.length; i++) {
+    var record = dataForYear[i];
     var race = record.race;
     incrementStats(stats, "executed_race_", record.race.toLowerCase());
   }
-  console.log(stats);
 
-  var totalExecutedDiv = $("#total-executed-in-us");
-  if(totalExecutedDiv.length > 0) {
+  var chartDiv = $("#" + divId);
+  if(chartDiv.length > 0) {
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
 
@@ -88,25 +94,46 @@ $(function() {
     function drawChart() {
 
       // Create the data table.
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Race');
-      data.addColumn('number', 'Executed');
-      data.addRows([
+      var chartData = new google.visualization.DataTable();
+      chartData.addColumn('string', 'Race');
+      chartData.addColumn('number', 'Executed');
+      chartData.addRows([
         ['Asian', stats.executed_race_asian],
         ['Black', stats.executed_race_black],
         ['Latino', stats.executed_race_latino],
-        ['Other', stats.executed_race_other],
-        ['White', stats.executed_race_white]
+        ['White', stats.executed_race_white],
+        ['Other', stats.executed_race_other]
       ]);
 
       // Set chart options
-      var options = {'title':'How Much Pizza I Ate Last Night',
-                      'width':400,
-                      'height':300};
+      var options = {
+        title:'2016 Executions by Race',
+        width:500,
+        height:300,
+        legend: {
+          position: 'labeled'
+        },
+        slices: {
+          0: { color: '#eee'},
+          1: { color: '#aaa'},
+          2: { color: '#777'},
+          3: { color: '#333'},
+          4: { color: '#000'}
+        }
+      };
 
       // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
+      var chart = new google.visualization.PieChart(document.getElementById(divId));
+      chart.draw(chartData, options);
     }
+  }
+}
+
+$(function() {
+
+  if(executionData.length > 0) {
+    showTotalExecuted(executionData);
+    showLastExecuted(executionData);
+    showExecutionPieChart(executionData, 2016, "2016-executions-by-race-chart");
   }
 });
