@@ -5,11 +5,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+    <link rel="stylesheet" href="client/css/bootstrap.min.css">
+    <link rel="stylesheet" href="client/css/bootstrap-responsive.min.css">
+
+    <script src="client/js/bootstrap.min.js"></script>
     <script src="execution-data.js"></script>
     <script src="execution-charts.js"></script>
+    <script src="death-row-by-state.js"></script>
     <style>
-      #polls #general-stats {
-        clear: both;
+      body {
+        padding-top: 60px;
+      }
+      footer {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        margin-top: 100px;
+        color: #99979c;
+        background-color: #2a2730;
+      }
+      footer a {
+        color: #fff;
+      }
+      footer a:hover {
+        color: #fff;
       }
     </style>
 
@@ -36,59 +56,136 @@
   </head>
   
   <body>
-    <h1>Deathly Politics.org</h1>
+    <div class="container">
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a href="http://deathlypolitics.org" class="brand">
+              <img src="client/img/deathlyflag2.svg"/ height="30" width="30"> DeathlyPolitics.org
+            </a>
+            <ul class="nav navbar-nav">
+              <li><a href="http://twitter.com/DeathlyPolitics" target="_blank">Twitter</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="page-header">
+        <h1>Deathly Politics</h1>
+      </div>
 
-    <div>v5</div>
-    <div id="polls">
+      <div class="row">
+        <div id="polls" class="span12">
+          <blockquote class="twitter-tweet" data-align="left" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Guess (anonymously): which state has had more executions in 2016 than in 2015? <a href="https://twitter.com/hashtag/Poll?src=hash">#Poll</a> <a href="https://twitter.com/hashtag/DeathPenalty?src=hash">#DeathPenalty</a></p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/800034688488247296">November 19, 2016</a></blockquote>
 
-      <blockquote class="twitter-tweet" data-align="left" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Guess (anonymously): which state has had more executions in 2016 than in 2015? <a href="https://twitter.com/hashtag/Poll?src=hash">#Poll</a> <a href="https://twitter.com/hashtag/DeathPenalty?src=hash">#DeathPenalty</a></p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/800034688488247296">November 19, 2016</a></blockquote>
+          <blockquote class="twitter-tweet" data-align="left"data-display="inline-block" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Guess: do you think most inmates that were executed in 2016 were white?</p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/799118556998733825">November 17, 2016</a></blockquote>
 
-      <blockquote class="twitter-tweet" data-align="left"data-display="inline-block" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Guess: do you think most inmates that were executed in 2016 were white?</p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/799118556998733825">November 17, 2016</a></blockquote>
+          <blockquote class="twitter-tweet" data-align="left"data-display="inline-block" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Abolish the Death Penalty in a state with 100 people on Death Row, but 1 is definitely innocent? Reply with reasons.</p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/798921848842915840">November 16, 2016</a></blockquote>
+        </div>
+      </div>
 
-      <blockquote class="twitter-tweet" data-align="left"data-display="inline-block" data-width="260" data-link-color="#000000" data-lang="en"><p lang="en" dir="ltr">Abolish the Death Penalty in a state with 100 people on Death Row, but 1 is definitely innocent? Reply with reasons.</p>&mdash; Death Penalty Polls (@DeathlyPolitics) <a href="https://twitter.com/DeathlyPolitics/status/798921848842915840">November 16, 2016</a></blockquote>
+      <div class="row">
+        <div class="span12">
+          <div id="general-stats">
+            Total executed: <span id="total-executed-in-us"><span>
+          </div>
+          <div id="last-executed">
+            <h2>Last person executed</h2>
+            <table class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Date of Execution</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Sex</th>
+                  <th>Race</th>
+                  <th>Number, Race, and Sex of Victims</th>
+                  <th>State</th>
+                  <th>Region</th>
+                  <th>Method</th>
+                  <th>Juvenile</th>
+                  <th>Federal</th>
+                  <th>Volunteer</th>
+                  <th>ForeignNational</th>
+                  <th>County</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="last-executed-date"></th>
+                  <td id="last-executed-name"></th>
+                  <td id="last-executed-age"></th>
+                  <td id="last-executed-sex"></th>
+                  <td id="last-executed-race"></th>
+                  <td id="last-executed-numberracesexofvictims"></th>
+                  <td id="last-executed-state"></th>
+                  <td id="last-executed-region"></th>
+                  <td id="last-executed-method"></th>
+                  <td id="last-executed-juvenile"></th>
+                  <td id="last-executed-federal"></th>
+                  <td id="last-executed-volunteer"></th>
+                  <td id="last-executed-foreignNational"></th>
+                  <td id="last-executed-county"></th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--<div id="chart_div"></div>-->
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="span9">
+          <h2>Number of inmates on Death Row by State</h2>
+          <div id="state-inmate-geochart" style="width: 900px; height: 500px;"></div>
+          <h2>Number of executions by State</h2>
+          <div id="state-execution-geochart" style="width: 900px; height: 500px;"></div>
+        </div>
+        <div class="span3">
+          <table class="table table-striped table-condensed">
+            <thead>
+              <tr>
+                <th>
+                  State
+                </th>
+                <th>
+                  Executions
+                </th>
+                <th>
+                  Inmates
+                </th>
+              </tr>
+            </thead>
+            <tbody id="number-dr-inmates-by-state">
+            </tbody>
+          </table>
+          <citation>Data collected from <a href="https://en.wikipedia.org/wiki/List_of_death_row_inmates_in_the_United_States" target="_blank">Wikipedia</a>.</citation>
+        </div>
+      </div>
+      
+      <hr/>
+      
+      <div class="row">
+        <div class="span12">
+          More announcements, statistics, articles will be posted here.
+        </div>
+      </div>
+      
+      
     </div>
+    
+    
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <p>
+              Copyright <a href="http://twitter.com/is4tomj" target="_blank">Tom Johnson</a> 2016
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
-    <br clear/>
-    <div id="general-stats">
-      Total executed: <span id="total-executed-in-us"><span>
-    </div>
-    <div id="last-executed">
-      <h2>Last person executed</h2>
-      <table>
-        <tr>
-          <th>Date of Execution</th>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Sex</th>
-          <th>Race</th>
-          <th>Number, Race, and Sex of Victims</th>
-          <th>State</th>
-          <th>Region</th>
-          <th>Method</th>
-          <th>Juvenile</th>
-          <th>Federal</th>
-          <th>Volunteer</th>
-          <th>ForeignNational</th>
-          <th>County</th>
-        </tr>
-          <td id="last-executed-date"></th>
-          <td id="last-executed-name"></th>
-          <td id="last-executed-age"></th>
-          <td id="last-executed-sex"></th>
-          <td id="last-executed-race"></th>
-          <td id="last-executed-numberracesexofvictims"></th>
-          <td id="last-executed-state"></th>
-          <td id="last-executed-region"></th>
-          <td id="last-executed-method"></th>
-          <td id="last-executed-juvenile"></th>
-          <td id="last-executed-federal"></th>
-          <td id="last-executed-volunteer"></th>
-          <td id="last-executed-foreignNational"></th>
-          <td id="last-executed-county"></th>
-        </tr>
-      </table>
-    </div>
-    <div id="chart_div"></div>
   </body>
 </html>
 
