@@ -1454,7 +1454,7 @@ var executionData = [];
     var recordHash = {}
     for(var j=0; j<fieldNames.length; j++) {
       recordHash[fieldNames[j]] = record[j];
-      executionData.push(recordHash);
     }
+    executionData.push(recordHash);
   }
 }
