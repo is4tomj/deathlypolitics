@@ -1,6 +1,19 @@
 "use strict";
 
+function showTotalExecuted(data) {
+  var space = $("#total-executed-in-us");
+  if(space.length > 0) {
+    space.text(data.length);
+  }
+}
+
 $(function() {
+
+  if(executionData.length > 0) {
+    showTotalExecuted(executionData);
+  }
+
+
   var totalExecutedDiv = $("#total-executed-in-us");
   if(totalExecutedDiv.length > 0) {
     // Load the Visualization API and the corechart package.
