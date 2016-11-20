@@ -1442,3 +1442,17 @@ var executionDataCSV = `01/10/1986,James Roach,25,m,White,1 White Male(s)1 White
 10/05/2016,Barney Fuller,53,m,White,1 White Male(s)1 White Female(s),TX,S,Lethal Injection,No,No,Yes,No,Houston County
 10/19/2016,Gregory Lawler,63,m,White,1 White Male(s),GA,S,Lethal Injection,No,No,No,No,Fulton
 11/16/2016,Steven Spears,54,m,White,1 White Female(s),GA,S,Lethal Injection,No,No,Yes,No,Lumpkin`;
+
+
+var executionData = {};
+{
+  var records = executionDataCSV.split("\n");
+  var fieldNames = executionDataCSVHeader.split(",");
+
+  for(var i=0; i<records.length; i++) {
+    var record = records[i].split(",");
+    for(var j=0; j<fieldNames.length; j++) {
+      executionData[fieldNames[j]] = record[j];
+    }
+  }
+}
