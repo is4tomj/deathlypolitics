@@ -59,61 +59,72 @@ function incrementStats(stats, keyBase, keyExtension) {
   return stats[key];
 }
 
-function showExecutionByRacePieChart(data, divId, title) {
+function showExecutionByRacePieChart(stats, canvas, title) {
+
+  var colors = []
+  for(var i=0; i<stats.keys.length; i++) {
+    var key = stats.keys[i];
+    switch(key.toLowerCase()) {
+      case 'asian':
+        colors.push("#222222");
+        break;
+      case 'black':
+        colors.push("#555555");
+        break;
+      case 'latino':
+        colors.push("#888888");
+        break;
+      case 'native american':
+        colors.push("#aaaaaa");
+        break;
+      case 'white':
+        colors.push("#dddddd");
+        break;
+    }
+  }
   
-  var stats = {};
-  for(var i=0; i<data.length; i++) {
-    var record = data[i];
-    var race = record.race;
-    incrementStats(stats, "executed_race_", record.race.toLowerCase());
+  var labels = [];
+  for (var i=0; i<stats.dataArray.length; i++) {
+    var percentage = Math.floor(100 * stats.dataArray[i]/stats.total);
+    labels.push(`${stats.keys[i]} (${percentage}%)`);
   }
 
-  var chartDiv = $("#" + divId);
-  if(chartDiv.length > 0) {
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages':['corechart']});
+  if($(canvas).length > 0) {
+    var ctx = canvas;
+    var myPieChart = new Chart(ctx,{
+      type: 'pie',
+      data: {
+          labels: labels,
+          datasets: [{
+              data: stats.dataArray,
+              backgroundColor: colors
+          }]
+      },
+      options: {
+          title: {
+            display: true,
+            text: title
+          },
+          legend: {
+            display: true
+          }
+      }
+    });
+  }
+}
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
+function showExecutionByRacePieCharts(data, dataForYear) {
+  var canvases = $(".executions-by-race-pie-chart");
+  for(var i=0; i<canvases.length; i++) {
+    var canvas = $(canvases[i]);
+    var year = canvas.attr("data-year");
 
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-      // Create the data table.
-      var chartData = new google.visualization.DataTable();
-      chartData.addColumn('string', 'Race');
-      chartData.addColumn('number', 'Executed');
-      chartData.addRows([
-        ['Asian', stats.executed_race_asian],
-        ['Black', stats.executed_race_black],
-        ['Latino', stats.executed_race_latino],
-        ['White', stats.executed_race_white],
-        ['Other', stats.executed_race_other]
-      ]);
-
-      // Set chart options
-      var options = {
-        title: title,
-        width:500,
-        height:300,
-        legend: {
-          position: 'labeled'
-        },
-        slices: {
-          0: { color: '#eee'},
-          1: { color: '#aaa'},
-          2: { color: '#777'},
-          3: { color: '#333'},
-          4: { color: '#000'}
-        }
-      };
-
-      // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.PieChart(document.getElementById(divId));
-      chart.draw(chartData, options);
+    if(dataForYear[year] == null || dataForYear[year] === undefined) {
+      dataForYear[year] = getExecutionStats(data, { year: year});
     }
+    
+    var stats = compileStats(dataForYear[year], ['race']);
+    showExecutionByRacePieChart(stats, canvas[0], `${year} Executions by Race`);
   }
 }
 
@@ -170,35 +181,10 @@ $(function() {
     showLastExecuted(executionData);
 
     var dataForYear = {};
-
-    dataForYear['2016'] = getExecutionStats(executionData, { year: '2016'});
-    showExecutionByRacePieChart(dataForYear['2016'], "2016-executions-by-race-chart", '2016 Executions by Race');
-
-    dataForYear['2015'] = getExecutionStats(executionData, { year: '2015'});
-    showExecutionByRacePieChart(dataForYear['2015'], "2015-executions-by-race-chart", '2015 Executions by Race');
-
-    dataForYear['2014'] = getExecutionStats(executionData, { year: '2014'});
-    showExecutionByRacePieChart(dataForYear['2014'], "2014-executions-by-race-chart", '2014 Executions by Race');
-
-    dataForYear['2013'] = getExecutionStats(executionData, { year: '2013'});
-    showExecutionByRacePieChart(dataForYear['2013'], "2013-executions-by-race-chart", '2013 Executions by Race');
-
-    dataForYear['2012'] = getExecutionStats(executionData, { year: '2012'});
-    showExecutionByRacePieChart(dataForYear['2012'], "2012-executions-by-race-chart", '2012 Executions by Race');
-
-    dataForYear['2011'] = getExecutionStats(executionData, { year: '2011'});
-    showExecutionByRacePieChart(dataForYear['2011'], "2011-executions-by-race-chart", '2011 Executions by Race');
-
-    dataForYear['2010'] = getExecutionStats(executionData, { year: '2010'});
-    showExecutionByRacePieChart(dataForYear['2010'], "2010-executions-by-race-chart", '2010 Executions by Race');
-
-    dataForYear['2009'] = getExecutionStats(executionData, { year: '2009'});
-    showExecutionByRacePieChart(dataForYear['2009'], "2009-executions-by-race-chart", '2009 Executions by Race');
-
+    showExecutionByRacePieCharts(executionData, dataForYear);
+    showExecutionsPerStatePerYear(executionData, dataForYear);
 
     var stats = compileStats(executionData, ['year']);
     showBarChart(stats, '', 'executions-per-year');
-
-    showExecutionsPerStatePerYear(executionData, dataForYear);
   }
 });
