@@ -117,8 +117,8 @@ function showExecutionByRacePieChart(data, divId, title) {
   }
 }
 
-function showBarChart(stats, title, divId, graphMax=false) {
-  var ctx = document.getElementById(divId);
+function showBarChart(stats, title, canvas, graphMax=false) {
+  var ctx = canvas;
   var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -154,46 +154,47 @@ $(function() {
     showTotalExecuted(executionData);
     showLastExecuted(executionData);
 
-    var dataFor2016 = getExecutionStats(executionData, { year: '2016'});
-    showExecutionByRacePieChart(dataFor2016, "2016-executions-by-race-chart", '2016 Executions by Race');
+    var dataForYear = {};
 
-    var dataFor2015 = getExecutionStats(executionData, { year: '2015'});
-    showExecutionByRacePieChart(dataFor2015, "2015-executions-by-race-chart", '2015 Executions by Race');
+    dataForYear['2016'] = getExecutionStats(executionData, { year: '2016'});
+    showExecutionByRacePieChart(dataForYear['2016'], "2016-executions-by-race-chart", '2016 Executions by Race');
 
-    var dataFor2014 = getExecutionStats(executionData, { year: '2014'});
-    showExecutionByRacePieChart(dataFor2014, "2014-executions-by-race-chart", '2014 Executions by Race');
+    dataForYear['2015'] = getExecutionStats(executionData, { year: '2015'});
+    showExecutionByRacePieChart(dataForYear['2015'], "2015-executions-by-race-chart", '2015 Executions by Race');
 
-    var dataFor2013 = getExecutionStats(executionData, { year: '2013'});
-    showExecutionByRacePieChart(dataFor2013, "2013-executions-by-race-chart", '2013 Executions by Race');
+    dataForYear['2014'] = getExecutionStats(executionData, { year: '2014'});
+    showExecutionByRacePieChart(dataForYear['2014'], "2014-executions-by-race-chart", '2014 Executions by Race');
 
-    var dataFor2012 = getExecutionStats(executionData, { year: '2012'});
-    showExecutionByRacePieChart(dataFor2012, "2012-executions-by-race-chart", '2012 Executions by Race');
+    dataForYear['2013'] = getExecutionStats(executionData, { year: '2013'});
+    showExecutionByRacePieChart(dataForYear['2013'], "2013-executions-by-race-chart", '2013 Executions by Race');
 
-    var dataFor2011 = getExecutionStats(executionData, { year: '2011'});
-    showExecutionByRacePieChart(dataFor2011, "2011-executions-by-race-chart", '2011 Executions by Race');
+    dataForYear['2012'] = getExecutionStats(executionData, { year: '2012'});
+    showExecutionByRacePieChart(dataForYear['2012'], "2012-executions-by-race-chart", '2012 Executions by Race');
 
-    var dataFor2010 = getExecutionStats(executionData, { year: '2010'});
-    showExecutionByRacePieChart(dataFor2010, "2010-executions-by-race-chart", '2010 Executions by Race');
+    dataForYear['2011'] = getExecutionStats(executionData, { year: '2011'});
+    showExecutionByRacePieChart(dataForYear['2011'], "2011-executions-by-race-chart", '2011 Executions by Race');
 
-    var dataFor2009 = getExecutionStats(executionData, { year: '2009'});
-    showExecutionByRacePieChart(dataFor2009, "2009-executions-by-race-chart", '2009 Executions by Race');
+    dataForYear['2010'] = getExecutionStats(executionData, { year: '2010'});
+    showExecutionByRacePieChart(dataForYear['2010'], "2010-executions-by-race-chart", '2010 Executions by Race');
+
+    dataForYear['2009'] = getExecutionStats(executionData, { year: '2009'});
+    showExecutionByRacePieChart(dataForYear['2009'], "2009-executions-by-race-chart", '2009 Executions by Race');
 
 
     var stats = compileStats(executionData, ['year']);
     showBarChart(stats, '', 'executions-per-year');
 
+    var canvases = $(".executions-per-state");
+    for(var i=0; i<canvases.length; i++) {
+      var canvas = $(canvases[i]);
+      var year = canvas.attr("data-year");
 
-    var stats = compileStats(dataFor2016, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2016`, '2016-executions-per-state', 20);
-
-    var stats = compileStats(dataFor2015, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2015`, '2015-executions-per-state', 20);
-
-    var stats = compileStats(dataFor2014, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2014`, '2014-executions-per-state', 20);
-
-    var stats = compileStats(dataFor2013, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2013`, '2013-executions-per-state', 20);
-
+      if(dataForYear[year] == null || dataForYear[year] === undefined) {
+        dataForYear[year] = getExecutionStats(executionData, { year: year});
+      }
+      
+      var stats = compileStats(dataForYear[year], ['state']);
+      showBarChart(stats, `${stats.total} executions in ${stats.keys.length} states in ${year}`, canvas[0], 20);
+    }
   }
 });
