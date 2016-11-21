@@ -148,6 +148,21 @@ function showBarChart(stats, title, canvas, graphMax=false) {
   });
 }
 
+function showExecutionsPerStatePerYear() {
+  var canvases = $(".executions-per-state");
+  for(var i=0; i<canvases.length; i++) {
+    var canvas = $(canvases[i]);
+    var year = canvas.attr("data-year");
+
+    if(dataForYear[year] == null || dataForYear[year] === undefined) {
+      dataForYear[year] = getExecutionStats(executionData, { year: year});
+    }
+    
+    var stats = compileStats(dataForYear[year], ['state']);
+    showBarChart(stats, `${stats.total} executions in ${stats.keys.length} states in ${year}`, canvas[0], 20);
+  }
+}
+
 $(function() {
 
   if(executionData.length > 0) {
@@ -184,17 +199,6 @@ $(function() {
     var stats = compileStats(executionData, ['year']);
     showBarChart(stats, '', 'executions-per-year');
 
-    var canvases = $(".executions-per-state");
-    for(var i=0; i<canvases.length; i++) {
-      var canvas = $(canvases[i]);
-      var year = canvas.attr("data-year");
-
-      if(dataForYear[year] == null || dataForYear[year] === undefined) {
-        dataForYear[year] = getExecutionStats(executionData, { year: year});
-      }
-      
-      var stats = compileStats(dataForYear[year], ['state']);
-      showBarChart(stats, `${stats.total} executions in ${stats.keys.length} states in ${year}`, canvas[0], 20);
-    }
+    showExecutionsPerStatePerYear();
   }
 });
