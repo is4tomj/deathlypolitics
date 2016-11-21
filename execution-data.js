@@ -1454,7 +1454,9 @@ var executionData = [];
     for(var j=0; j<fieldNames.length; j++) {
       var fieldName = fieldNames[j].toLowerCase(); 
       if(j==0) { // date
-        recordHash[fieldName] = new Date(record[j]);
+        var date = new Date(record[j]);
+        recordHash[fieldName] = date
+        recordHash.year = date.getFullYear().toString();
       }
       else {
         recordHash[fieldName] = record[j];  

@@ -59,31 +59,6 @@ function incrementStats(stats, keyBase, keyExtension) {
   return stats[key];
 }
 
-function getExecutionStats(stats, criteria) {
-
-  var filteredStats = [];
-
-  for(var i=0; i<stats.length; i++) {
-    var record = stats[i];
-    var keys = Object.keys(criteria);
-    var shouldAddToResults = true;
-
-    for(var j=0; j<keys.length; j++) {
-      var key = keys[j];
-
-      if(record[key].toString().match(criteria[key]) === null) {
-        shouldAddToResults = false;
-      }
-    }
-
-    if(shouldAddToResults) {
-      filteredStats.push(record);
-    }
-  }
-
-  return filteredStats;
-}
-
 function showExecutionByRacePieChart(data, divId, title) {
   
   var stats = {};
@@ -142,6 +117,37 @@ function showExecutionByRacePieChart(data, divId, title) {
   }
 }
 
+function showBarChart(stats, title, divId) {
+  var ctx = document.getElementById(divId);
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: stats.keys,
+          datasets: [{
+              data: stats.dataArray
+          }]
+      },
+      options: {
+          title: {
+            display: true,
+            text: title
+          },
+          legend: {
+            display: false
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      fixedStepSize: 5,
+                      max: stats.max
+                  }
+              }]
+          }
+      }
+  });
+}
+
 $(function() {
 
   if(executionData.length > 0) {
@@ -171,11 +177,27 @@ $(function() {
 
     var dataForYear = getExecutionStats(executionData, { date: new RegExp('2009', 'i')});
     showExecutionByRacePieChart(dataForYear, "2009-executions-by-race-chart", '2009 Executions by Race');
-  }
 
-  // const element = <h1>Hello, world</h1>;
-  // ReactDOM.render(
-  //   element,
-  //   document.getElementById('root')
-  // );
+
+    var stats = compileStats(executionData, ['year']);
+    showBarChart(stats, '', 'executions-per-year');
+
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2016', 'i') });
+    var stats = compileStats(dataForYear, ['state']);
+    showBarChart(stats, `${stats.total} executions in 2016`, '2016-executions-per-state');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2015', 'i') });
+    var stats = compileStats(dataForYear, ['state']);
+    showBarChart(stats, `${stats.total} executions in 2015`, '2015-executions-per-state');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2014', 'i') });
+    var stats = compileStats(dataForYear, ['state']);
+    showBarChart(stats, `${stats.total} executions in 2014`, '2014-executions-per-state');
+
+    var dataForYear = getExecutionStats(executionData, { date: new RegExp('2013', 'i') });
+    var stats = compileStats(dataForYear, ['state']);
+    showBarChart(stats, `${stats.total} executions in 2013`, '2013-executions-per-state');
+
+  }
 });
