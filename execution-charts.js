@@ -117,7 +117,7 @@ function showExecutionByRacePieChart(data, divId, title) {
   }
 }
 
-function showBarChart(stats, title, divId) {
+function showBarChart(stats, title, divId, graphMax=false) {
   var ctx = document.getElementById(divId);
   var myChart = new Chart(ctx, {
       type: 'bar',
@@ -140,7 +140,7 @@ function showBarChart(stats, title, divId) {
                   ticks: {
                       beginAtZero:true,
                       fixedStepSize: 5,
-                      max: stats.max
+                      max: graphMax || stats.max
                   }
               }]
           }
@@ -184,16 +184,16 @@ $(function() {
 
 
     var stats = compileStats(dataFor2016, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2016`, '2016-executions-per-state');
+    showBarChart(stats, `${stats.total} executions in 2016`, '2016-executions-per-state', 20);
 
     var stats = compileStats(dataFor2015, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2015`, '2015-executions-per-state');
+    showBarChart(stats, `${stats.total} executions in 2015`, '2015-executions-per-state', 20);
 
     var stats = compileStats(dataFor2014, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2014`, '2014-executions-per-state');
+    showBarChart(stats, `${stats.total} executions in 2014`, '2014-executions-per-state', 20);
 
     var stats = compileStats(dataFor2013, ['state']);
-    showBarChart(stats, `${stats.total} executions in 2013`, '2013-executions-per-state');
+    showBarChart(stats, `${stats.total} executions in 2013`, '2013-executions-per-state', 20);
 
   }
 });
