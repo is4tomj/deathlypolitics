@@ -148,14 +148,14 @@ function showBarChart(stats, title, canvas, graphMax=false) {
   });
 }
 
-function showExecutionsPerStatePerYear() {
+function showExecutionsPerStatePerYear(data, dataForYear) {
   var canvases = $(".executions-per-state");
   for(var i=0; i<canvases.length; i++) {
     var canvas = $(canvases[i]);
     var year = canvas.attr("data-year");
 
     if(dataForYear[year] == null || dataForYear[year] === undefined) {
-      dataForYear[year] = getExecutionStats(executionData, { year: year});
+      dataForYear[year] = getExecutionStats(data, { year: year});
     }
     
     var stats = compileStats(dataForYear[year], ['state']);
@@ -199,6 +199,6 @@ $(function() {
     var stats = compileStats(executionData, ['year']);
     showBarChart(stats, '', 'executions-per-year');
 
-    showExecutionsPerStatePerYear();
+    showExecutionsPerStatePerYear(executionData, dataForYear);
   }
 });
