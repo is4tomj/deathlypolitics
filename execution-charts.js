@@ -144,7 +144,7 @@ function showBarChart(stats, title, canvas, graphMax=false) {
   });
 }
 
-function showExecutionByRacePieCharts(data, dataForYear) {
+function generateExecutionCharts(data, dataForYear) {
   var canvases = $(".executions-per-year-chart");
   for(var i=0; i<canvases.length; i++) {
     var canvas = $(canvases[i]);
@@ -172,15 +172,18 @@ function showExecutionByRacePieCharts(data, dataForYear) {
 
 $(function() {
 
+  buildCharts();
+
   if(executionData.length > 0) {
     showTotalExecuted(executionData);
     showLastExecuted(executionData);
 
     var dataForYear = {};
-    showExecutionByRacePieCharts(executionData, dataForYear);
+    generateExecutionCharts(executionData, dataForYear);
     // showExecutionsPerStatePerYear(executionData, dataForYear);
 
     var stats = compileStats(executionData, ['year']);
     showBarChart(stats, '', 'executions-per-year');
   }
+
 });
